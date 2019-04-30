@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const bearerToken = require('express-bearer-token');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -31,9 +32,21 @@ app.get('/', (req, res) => {
 	res.send('Hello Express app');
 });
 
-app.post('/registration',(req, res)=>{
-    //req.nome, req.cognome, req.password, req.
-})
+app.route('/registration')
+    .post((req, res)=>{
+        //req.nome, req.cognome, req.numero, req.password
+        bcrypt.genSalt(10, (err, salt)=>{
+            bcrypt.hash(req.password, salt,(err, hash)=>{
+                db.run('INSERT INTO Utente (?,?,?,?)', [req.nome, req.cognome, req.numero, hash], (err)=>{
+                    if(err) res.staus(404).end()
+                    res.status(200).send(jwt.sign({})) //inserire dati nel token jwt
+                })
+            })
+        })
+    })
+    .get((req,res) =>{
+
+    })
 
 
 
