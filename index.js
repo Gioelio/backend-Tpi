@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const bearerToken = require('express-bearer-token');
+const bcrypt = require('bcrypt');
 
 const app = express();
 
@@ -29,6 +30,10 @@ app.use(express.static('public'));
 app.get('/', (req, res) => {
 	res.send('Hello Express app');
 });
+
+app.post('/registration',(req, res)=>{
+    //req.nome, req.cognome, req.password, req.
+})
 
 
 
