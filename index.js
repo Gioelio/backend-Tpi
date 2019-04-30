@@ -4,12 +4,12 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-const sqlite3 = require('sqlite3');//importa la libreria 
+const sqlite3 = require('sqlite3');//importa la libreria
 var db = new sqlite3.Database('./DATABASE.sqlite3',(err) =>{
   if(err)
   console.error(err.message)
   console.log('connessione riuscita')
-} );//crea la connessione
+} );//crea la connessionea
 
 
 
