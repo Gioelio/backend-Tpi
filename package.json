@@ -7,8 +7,10 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "asymmetric-crypto": "^1.0.2",
     "bcrypt": "^3.0.6",
     "body-parser": "latest",
+    "cors": "^2.8.5",
     "express": "latest",
     "express-bearer-token": "^2.4.0",
     "jsonwebtoken": "^8.5.1",
