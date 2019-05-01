@@ -22,7 +22,6 @@ var db = new sqlite3.Database('./DATABASE.sqlite3',(err) =>{
 } );//crea la connessionea
 
 
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
