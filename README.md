@@ -5,7 +5,7 @@
 body:{
   nome: ...,
   cognome: ...,
-  numero: ...,
+  email: ...,
   password: ...,(in chiaro, md5 lato  server)
 }
 /utenti - get (login)
