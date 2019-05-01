@@ -43,23 +43,27 @@ app.route('/utenti')
         var email = req.body.email;
         bcrypt.genSalt(10, (err, salt)=>{
             bcrypt.hash(req.body.password, salt,(err, hash)=>{
-                db.run('INSERT INTO Utente (?,?,?,?)', [req.body.nome, req.body.email, hash, req.body.cognome], (err)=>{
-                    if(err) {console.log(err); res.json({'error': 'errore nella registrazione'})}
+                db.run('INSERT INTO Utente VALUES (?,?,?,?)', [req.body.nome, req.body.email, hash, req.body.cognome], (err)=>{
+                    if(err) {res.json({'error': 'errore nella registrazione'})}
                     res.status(200).json({'token': jwt.sign({'email': email}, keyPair.secretKey)}) //inserire dati nel token jwt
                 })
             })
         })
     })
     .post(jsonParser, (req,res) =>{
-        db.all('SELECT * FROM Utenti WHERE email = ?', [req.email], (err, result) =>{
+
+        db.all('SELECT * FROM Utente WHERE email = ?', [req.body.email], (err, result) =>{
             if(err) throw err;
+
             if(result.length === 0)
                 res.json({error: 'Non esiste nessun utente registrato con questa email'});
             else
-                bcrypt.compare(req.password, result[0].password, (err, resCompare)=>{
+                bcrypt.compare(req.body.password, result[0].password, (err, resCompare)=>{
                     if(resCompare){
+                        console.log('le password corrispondono')
                         res.json({'token': jwt.sign({'email': email}, keyPair.secretKey)})
                     }
+                    else res.json({'error': 'le password non corrispondono'})
                 })
         })
     })
