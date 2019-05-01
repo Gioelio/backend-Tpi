@@ -37,14 +37,15 @@ app.get('/', (req, res) => {
 	res.send('Hello Express app');
 });
 
-app.route('/registration')
+app.route('/utenti')
     .put(jsonParser,(req, res)=>{
-        //req.nome, req.cognome, req.numero, req.password
+        console.log(req.body);
+        var email = req.body.email;
         bcrypt.genSalt(10, (err, salt)=>{
-            bcrypt.hash(req.password, salt,(err, hash)=>{
-                db.run('INSERT INTO Utente (?,?,?,?)', [req.nome, req.cognome, req.numero, hash], (err)=>{
-                    if(err) res.staus(404).end()
-                    res.status(200).send({'token': jwt.sign({'email': email}, keyPair.secretKey)}) //inserire dati nel token jwt
+            bcrypt.hash(req.body.password, salt,(err, hash)=>{
+                db.run('INSERT INTO Utente (?,?,?,?)', [req.body.nome, req.body.email, hash, req.body.cognome], (err)=>{
+                    if(err) {console.log(err); res.json({'error': 'errore nella registrazione'})}
+                    res.status(200).json({'token': jwt.sign({'email': email}, keyPair.secretKey)}) //inserire dati nel token jwt
                 })
             })
         })
