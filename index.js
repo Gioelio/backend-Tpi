@@ -54,7 +54,7 @@ app.route('/utenti')
 
         db.all('SELECT * FROM Utente WHERE email = ?', [req.body.email], (err, result) =>{
             if(err) throw err;
-
+            var email = req.body.email;
             if(result.length === 0)
                 res.json({error: 'Non esiste nessun utente registrato con questa email'});
             else
