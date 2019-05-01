@@ -1,15 +1,16 @@
 # backend-Tpi
 ## query calls
 ```
-/utenti - post (registrazione)
+/utenti - put (registrazione)
 body:{
   nome: ...,
   cognome: ...,
   email: ...,
   password: ...,(in chiaro, md5 lato  server)
 }
-/utenti - get (login)
-autentication:{
-  
+/utenti - post (login)
+body: {
+  email: ...,
+  password: ..., (in chiaro)
 }
 ```
