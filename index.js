@@ -51,7 +51,6 @@ app.route('/utenti')
         })
     })
     .post(jsonParser, (req,res) =>{
-
         db.all('SELECT * FROM Utente WHERE email = ?', [req.body.email], (err, result) =>{
             if(err) throw err;
             var email = req.body.email;
@@ -68,6 +67,11 @@ app.route('/utenti')
         })
     })
 
+app.route('/evento')
+    .post(jsonParser, (req,res) =>{
+        console.log(req.token);
+        //db.run('INSERT INTO Evento VALUES (?,?)', [req.body.idEvento])
+    })
 
 
 app.listen(3000, () => console.log('server started'));
