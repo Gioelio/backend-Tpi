@@ -76,8 +76,9 @@ app.route('/evento')
             console.log(err)
             console.log(decoded)
             db.run('INSERT INTO Evento VALUES(?,?,?,?,?)', [req.body.dataInizio, req.body.dataFine, req.body.giorni, decoded.email, req.body.lasso], (err)=>{
-                if(err) res.json(err);
-                else res.status(200).json('operazione completata con successo')
+                if(err){console.log(err); res.status(403).json(err)}
+                else
+                res.status(200).json('operazione completata con successo')
             })
         })
         //db.run('INSERT INTO Evento VALUES (?,?)', [req.body.idEvento])
