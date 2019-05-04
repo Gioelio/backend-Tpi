@@ -8,6 +8,8 @@ const keyPair = crypto.keyPair();
 const cors = require('cors');
 const jsonParser = bodyParser.json();
 
+const secretKey = 'shhhhh';
+
 const app = express();
 
 app.use(cors());
@@ -60,7 +62,7 @@ app.route('/utenti')
                 bcrypt.compare(req.body.password, result[0].password, (err, resCompare)=>{
                     if(resCompare){
                         console.log('le password corrispondono')
-                        res.json({'token': jwt.sign({'email': email}, keyPair.secretKey)})
+                        res.json({'token': jwt.sign({'email': email}, secretKey)})
                     }
                     else res.json({'error': 'le password non corrispondono'})
                 })
@@ -70,6 +72,14 @@ app.route('/utenti')
 app.route('/evento')
     .post(jsonParser, (req,res) =>{
         console.log(req.token);
+        jwt.verify(req.token, secretKey, (err,decoded)=>{
+            console.log(err)
+            console.log(decoded)
+            db.run('INSERT INTO Evento VALUES(?,?,?,?,?)', [req.body.dataInizio, req.body.dataFine, req.body.giorni, decoded.email, req.body.lasso], (err)=>{
+                if(err) res.json(err);
+                else res.status(200).json('operazione completata con successo')
+            })
+        })
         //db.run('INSERT INTO Evento VALUES (?,?)', [req.body.idEvento])
     })
 
