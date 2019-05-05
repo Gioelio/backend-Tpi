@@ -75,13 +75,18 @@ app.route('/evento')
         jwt.verify(req.token, secretKey, (err,decoded)=>{
             console.log(err)
             console.log(decoded)
-            db.run('INSERT INTO Evento VALUES(?,?,?,?,?)', [req.body.dataInizio, req.body.dataFine, req.body.giorni, decoded.email, req.body.lasso], (err)=>{
+            db.run('INSERT INTO Evento(dataInizio, dataFine, giorniNonDisponibili, utenteCreatore, lasso) VALUES(?,?,?,?,?)', [req.body.dataInizio, req.body.dataFine, req.body.giorni, decoded.email, req.body.lasso], (err)=>{
                 if(err){console.log(err); res.status(403).json(err)}
                 else
                 res.status(200).json('operazione completata con successo')
             })
         })
         //db.run('INSERT INTO Evento VALUES (?,?)', [req.body.idEvento])
+    })
+    .get((req,res)=>{
+        db.all('SELECT Evento.*, Utente.nome, Utente.cognome FROM Evento, Utente WHERE Evento.utenteCreatore = Utente.email', (err, result)=>{
+            res.json(result);
+        })
     })
 
 
