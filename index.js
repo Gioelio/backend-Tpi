@@ -3,8 +3,6 @@ const bodyParser = require('body-parser');
 const bearerToken = require('express-bearer-token');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const crypto = require('asymmetric-crypto');
-const keyPair = crypto.keyPair();
 const cors = require('cors');
 const jsonParser = bodyParser.json();
 
@@ -66,6 +64,25 @@ app.route('/utenti')
                     }
                     else res.json({'error': 'le password non corrispondono'})
                 })
+        })
+    })
+
+app.route('/prenotazione')
+    .post(jsonParser, (req, res)=>{
+        var dataInizio = new Date(req.body.dataInizio)
+        var diff = 30;
+        rangeBasso = new Date(dataInizio.getTime() - diff*60000);
+        rangeAlto = new Date(dataInizio.getTime() + diff*60000);
+        jwt.verify(req.token, secretKey, (err, decoded) =>{
+            res.status(421).json({'errore' : 'utente non registrato', 'type' : 'redirect'}) //bisogna gestire dal client questo numero
+            db.all('SELECT * FROM Prenotazione WHERE Prenotazione.data BETWEEN ? AND ?', [rangeBasso, rangeAlto], (err, result)=>{
+                if(result.length === 0){
+                    db.run('INSERT INTO Prenotazione(email, data) VALUES(?,?)', [decoded.email, dataInizio],(err, result) =>{
+                        res.json()
+                    })
+                }
+                else res.status(420).json({'errore': 'esiste già una prenotazione per questa data', 'type' : 'message'})
+            })
         })
     })
 
