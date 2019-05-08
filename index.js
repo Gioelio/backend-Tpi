@@ -85,6 +85,9 @@ app.route('/prenotazione')
             })
         })
     })
+    .get(jsonParser, (req,res) =>{
+        console.log(req.token);
+    })
 
 
 app.route('/evento')
