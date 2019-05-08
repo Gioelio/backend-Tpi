@@ -86,7 +86,12 @@ app.route('/prenotazione')
         })
     })
     .get(jsonParser, (req,res) =>{
-        console.log(req.token);
+        jwt.verify(req.token, secretKey, (err, decoded)=>{
+            if(err) res.json({})
+        })
+        db.all('SELECT * FROM Prenotazione WHERE Prenotazione.email = ?', [decoded.email], (err, result)=>{
+            res.json(result); //da testare
+        })
     })
 
 
