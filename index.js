@@ -74,17 +74,18 @@ app.route('/prenotazione')
         rangeBasso = new Date(dataInizio.getTime() - diff*60000);
         rangeAlto = new Date(dataInizio.getTime() + diff*60000);
         jwt.verify(req.token, secretKey, (err, decoded) =>{
-            res.status(421).json({'errore' : 'utente non registrato', 'type' : 'redirect'}) //bisogna gestire dal client questo numero
+            if(err) res.json({'message' : 'utente non registrato', 'type' : 'redirect'})
             db.all('SELECT * FROM Prenotazione WHERE Prenotazione.data BETWEEN ? AND ?', [rangeBasso, rangeAlto], (err, result)=>{
                 if(result.length === 0){
                     db.run('INSERT INTO Prenotazione(email, data) VALUES(?,?)', [decoded.email, dataInizio],(err, result) =>{
-                        res.json()
+                        res.json({'message' : 'riuscito', 'type' : 'success'})
                     })
                 }
-                else res.status(420).json({'errore': 'esiste già una prenotazione per questa data', 'type' : 'message'})
+                else res.json({'message': 'esiste già una prenotazione per questa data', 'type' : 'error'})
             })
         })
     })
+
 
 app.route('/evento')
     .post(jsonParser, (req,res) =>{
