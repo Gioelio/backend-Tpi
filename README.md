@@ -13,4 +13,11 @@ body: {
   email: ...,
   password: ..., (in chiaro)
 }
+/prenotazione - post (aggiunge prenotazione)
+authentication: 'Bearer ' + token
+body: {
+  dataInizio: ...,
+}
+/prenotazione - get
+authentication: 'Bearer ' + token
 ```
