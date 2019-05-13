@@ -44,8 +44,10 @@ app.route('/utenti')
         bcrypt.genSalt(10, (err, salt)=>{
             bcrypt.hash(req.body.password, salt,(err, hash)=>{
                 db.run('INSERT INTO Utente VALUES (?,?,?,?)', [req.body.nome, req.body.email, hash, req.body.cognome], (err)=>{
-                    if(err) {res.json({'error': 'errore nella registrazione'})}
-                    res.status(200).json({'token': jwt.sign({'email': email}, keyPair.secretKey)}) //inserire dati nel token jwt
+                    if(err)
+                        res.json({'error': 'errore nella registrazione'})
+                    else
+                    res.json({'token': jwt.sign({'email': email}, secretKey)}) //inserire dati nel token jwt
                 })
             })
         })
@@ -89,9 +91,14 @@ app.route('/prenotazione')
         console.log(req.token);
         jwt.verify(req.token, secretKey, (err, decoded)=>{
             if(err) throw err;
-            db.all('SELECT * FROM Prenotazione WHERE Prenotazione.email = ?', [decoded.email], (err, result)=>{
-                res.json(result); //da testare
-            })
+            if(decoded.email === 'admin@admin')
+                db.all('SELECT * FROM Prenotazione', (err, result) =>{
+                    res.json(result)
+                })
+            else
+                db.all('SELECT * FROM Prenotazione WHERE Prenotazione.email = ?', [decoded.email], (err, result)=>{
+                    res.json(result); //da testare
+                })
         })
     })
 
