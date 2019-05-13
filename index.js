@@ -25,7 +25,7 @@ var db = new sqlite3.Database('./DATABASE.sqlite3',(err) =>{
   if(err)
   console.error(err.message)
   console.log('connessione riuscita')
-} );//crea la connessionea
+} );//crea la connessione
 
 
 app.use(bodyParser.json());
