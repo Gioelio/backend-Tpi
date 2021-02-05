@@ -1,4 +1,5 @@
-# backend-Tpi [progetto scolastico]
+# backend-Tpi [school project]
+Simple backend that permit to the logged user to add a prenotation to another person
 ## query calls
 ```
 /utenti - put (registrazione)
